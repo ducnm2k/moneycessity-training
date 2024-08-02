@@ -33,7 +33,7 @@ function Post() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/publications/${PUBLICATION_ID}/posts`
+          `/posts`
         );
         setPosts(response.data.data);
         console.log(response.data.data);
