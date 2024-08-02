@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import axios from "axios";
+import axios from "../../Utils/axios";
 
 // --------------------------------------------------------------------------------------
 // INITIAL
@@ -63,10 +63,13 @@ export function getPostsDefault() {
     dispatch(slice.actions.startLoading);
     try {
       const response = await axios.get("/posts", {
-        audience: initialState.audience,
-        order_by: initialState.order_by,
-        direction: initialState.direction,
+        params: {
+          audience: "free",
+          order_by: "publish_date",
+          direction: "desc",
+        },
       });
+      dispatch(slice.actions.getPostsSuccess(response.data.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
