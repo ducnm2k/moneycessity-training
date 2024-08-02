@@ -1,5 +1,7 @@
 import axios, { PUBLICATION_ID } from "../../Utils/axios";
 import { useEffect, useState } from "react";
+import { useDispatch,useSelector } from "../../Redux/store";
+import { getPostsDefault } from "../../Redux/Slices/posts";
 
 //  function Post() {
 //   const [post, setPost] = useState();
@@ -25,40 +27,50 @@ import { useEffect, useState } from "react";
 // }
 
 function Post() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [posts, setPosts] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `/posts`
+  //       );
+  //       setPosts(response.data.data);
+  //       console.log(response.data.data);
+  //     } catch (error) {
+  //       setError(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
+
+  // console.log("POSTS:", posts);
+
+  // ---------------------------------------------------------------------------------------------
+  const dispatch = useDispatch();
+  const {posts} = useSelector((state)=>state.posts);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `/publications/${PUBLICATION_ID}/posts`
-        );
-        setPosts(response.data.data);
-        console.log(response.data.data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    dispatch(getPostsDefault());
+    console.log(posts);
+  }, [dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  console.log("POSTS:", posts);
   return (
     <div>
       <h1>Data from API</h1>
-      {posts[0].authors}
+      {/* {posts[0].authors} */}
       {/* <ul>
         {posts.map((post) => {
           return <li key={post.id}>{post.title}</li>;
@@ -66,10 +78,17 @@ function Post() {
       </ul> */}
       {posts.map((post) => {
         return (
-          <div key={post.id} style={{ width: "60%", outline: "thick solid #000", margin: "auto" }}>
+          <div
+            key={post.id}
+            style={{
+              width: "60%",
+              outline: "thick solid #000",
+              margin: "auto",
+            }}
+          >
             <h2>{post.title}</h2>
-            <img src={post.thumbnail_url} style={{ width: "20%" }}/>
-            <br/>
+            <img src={post.thumbnail_url} style={{ width: "20%" }} />
+            <br />
             <a>{post.preview_text}</a>
           </div>
         );
